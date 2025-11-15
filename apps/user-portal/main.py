@@ -17,6 +17,20 @@ store = KnowledgeStore(db_path=Path("data/knowledge.sqlite"))
 llm = AdaptiveLLMPipeline()
 
 
+@app.get("/")
+def root() -> Dict[str, Dict[str, str] | str]:
+    """Return a landing payload so the base URL does not 404."""
+    return {
+        "service": "AICE User Portal",
+        "status": "ok",
+        "routes": {
+            "mock_tests": "/mock-tests",
+            "analytics": "/analytics",
+            "remediation": "/remediation",
+        },
+    }
+
+
 @app.get("/mock-tests")
 def mock_tests() -> Dict:
     questions = store.search("government exam", limit=30)

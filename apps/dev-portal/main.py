@@ -17,6 +17,21 @@ ingestion = IngestionPipeline(tmp_dir=tmp_dir)
 store = KnowledgeStore(db_path=Path("data/knowledge.sqlite"))
 
 
+@app.get("/")
+def root() -> dict:
+    """Provide a quick index so hitting the base URL is informative."""
+    return {
+        "service": "AICE Developer Portal",
+        "status": "ok",
+        "routes": {
+            "upload_pdf": "/upload/pdf",
+            "upload_images": "/upload/images",
+            "validate": "/validate",
+            "tag": "/tag",
+        },
+    }
+
+
 @app.post("/upload/pdf")
 async def upload_pdf(file: UploadFile = File(...)):
     content = await file.read()
